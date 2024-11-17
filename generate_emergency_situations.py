@@ -187,14 +187,6 @@ def create_large_emergency_dataset():
 
 # Create and save the dataset
 df = create_large_emergency_dataset()
-df.to_csv('large_emergency_dataset.csv', index=False)
+df.to_csv('data/processed/large_emergency_dataset.csv', index=False)
 
 print(f"Created dataset with {len(df)} entries")
-print("\nDataset Statistics:")
-print("\nEmergency Levels:")
-print(df['emergency_level'].value_counts())
-print("\nSentiment Distribution:")
-print(df['sentiment'].value_counts())
-print("\nDisaster Types:")
-print(df['disaster_type'].value_counts())
-print("\nFile size:", os.path.getsize('large_emergency_dataset.csv') / (1024*1024), "MB")
