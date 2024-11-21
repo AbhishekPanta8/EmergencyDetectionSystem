@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Classification System</title>
+  <style>
+  
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(-45deg, #6184f6, #4a48b4, #a39cf6, #efeef3);
+      background-size: 400% 400%;
+      animation: gradientAnimation 8s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      width: 900px;
+      height: 650px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      padding: 25px;
+      text-align: center;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #444;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    textarea {
+      width: 90%;
+      height: 120px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+      resize: none;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    textarea:focus {
+      outline: none;
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(255, 107, 107, 0.6);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      background: linear-gradient(45deg, #ff6b6b, #d63031);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: box-shadow 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+    }
+
+    .symbol-loader {
+      display: none;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px auto;
+    }
+
+    .symbol-loader span {
+      font-size: 40px;
+      animation: bounce 1.5s infinite;
+    }
+
+    .symbol-loader span:nth-child(1) { animation-delay: 0s; }
+    .symbol-loader span:nth-child(2) { animation-delay: 0.3s; }
+    .symbol-loader span:nth-child(3) { animation-delay: 0.6s; }
+    .symbol-loader span:nth-child(4) { animation-delay: 0.9s; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 20px;
+      font-weight: bold;
+      animation: fadeInResult 0.8s ease forwards;
+    }
+
+    @keyframes fadeInResult {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-badge {
+      margin-top: 15px;
+      padding: 10px 25px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 25px;
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      display: inline-block;
+      animation: popIn 0.6s ease forwards;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
+    .critical { background: linear-gradient(45deg, #ff6b6b, #e63946); }
+    .low-emergency { background: linear-gradient(45deg, #2ecc71, #27ae60); }
+    .high { background: linear-gradient(45deg, #f39c12, #e67e22); }
+    .panic { background: linear-gradient(45deg, #d35400, #e74c3c); }
+
+    .symbol {
+      font-size: 50px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚨 Emergency Classification System 🚨</h1>
+    <textarea id="text-input" placeholder="Describe the emergency here..."></textarea>
+    <button id="validate-btn">Analyze</button>
+    <div class="symbol-loader" id="symbol-loader">
+      <span>🔴</span><span>🟢</span><span>🟠</span><span>⚠️</span>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const validateBtn = document.getElementById('validate-btn');
+    const textInput = document.getElementById('text-input');
+    const loader = document.getElementById('symbol-loader');
+    const result = document.getElementById('result');
+
+    validateBtn.addEventListener('click', () => {
+      const text = textInput.value.trim();
+      if (!text) {
+        alert("Please enter emergency details.");
+        return;
+      }
+
+      loader.style.display = 'flex';
+      result.innerHTML = '';
+
+      setTimeout(() => {
+        loader.style.display = 'none';
+        const statuses = [
+          { status: "Critical", symbol: "🔴", badge: "critical" },
+          { status: "Low Emergency", symbol: "🟢", badge: "low-emergency" },
+          { status: "High", symbol: "🟠", badge: "high" },
+          { status: "Panic", symbol: "⚠️", badge: "panic" }
+        ];
+
+        const randomIndex = Math.floor(Math.random() * statuses.length);
+        const { status, symbol, badge } = statuses[randomIndex];
+
+        result.innerHTML = `
+          <div>🚦 Analysis Complete! 🚦</div>
+          <div class="status-badge ${badge}">${status}</div>
+          <div class="symbol">${symbol}</div>
+        `;
+      }, 3000);
+    });
+  </script>
+</body>
+</html>
