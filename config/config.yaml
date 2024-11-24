@@ -1,0 +1,21 @@
+data_paths:
+  emergency_dataset: 'data/raw/large_emergency_dataset.csv'
+  911_calls: 'data/raw/911_calls_dataset_1000.csv'
+
+paths:
+  model_dir: 'models/saved_models'
+  log_dir: 'logs'
+  processed_data: 'data/processed'
+
+model:
+  model_name: 'roberta-base'
+  max_length: 128
+  batch_size: 16
+
+training:
+  batch_size: 32  
+  learning_rate: 2e-5
+  num_epochs: 1
+  test_size: 0.2
+  early_stopping_patience: 2
+  weight_decay: 0.01

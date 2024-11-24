@@ -187,6 +187,6 @@ def create_large_emergency_dataset():
 
 # Create and save the dataset
 df = create_large_emergency_dataset()
-df.to_csv('data/processed/large_emergency_dataset.csv', index=False)
+df.to_csv('data/raw/large_emergency_dataset.csv', index=False)
 
 print(f"Created dataset with {len(df)} entries")
