@@ -122,20 +122,13 @@ class EmergencyPredictor:
                 disaster_type = torch.argmax(outputs['disaster_type_logits'], dim=1).item()
                 sentiment = torch.argmax(outputs['sentiment_logits'], dim=1).item()
                 
-                # Get prediction probabilities
-                emergency_probs = torch.softmax(outputs['emergency_level_logits'], dim=1)
-                disaster_probs = torch.softmax(outputs['disaster_type_logits'], dim=1)
-                sentiment_probs = torch.softmax(outputs['sentiment_logits'], dim=1)
                 
                 results.append({
                     'text': text,
                     'predictions': {
                         'emergency_level': self.get_label_name('emergency_level', emergency_level),
-                        'emergency_level_confidence': emergency_probs.max().item(),
                         'disaster_type': self.get_label_name('disaster_type', disaster_type),
-                        'disaster_type_confidence': disaster_probs.max().item(),
                         'sentiment': self.get_label_name('sentiment', sentiment),
-                        'sentiment_confidence': sentiment_probs.max().item()
                     }
                 })
         
@@ -160,9 +153,6 @@ if __name__ == "__main__":
     for pred in predictions:
         print("\nText:", pred['text'])
         print("Predictions:")
-        print(f"Emergency Level: {pred['predictions']['emergency_level']} "
-              f"(Confidence: {pred['predictions']['emergency_level_confidence']:.2f})")
-        print(f"Disaster Type: {pred['predictions']['disaster_type']} "
-              f"(Confidence: {pred['predictions']['disaster_type_confidence']:.2f})")
-        print(f"Sentiment: {pred['predictions']['sentiment']} "
-              f"(Confidence: {pred['predictions']['sentiment_confidence']:.2f})")
+        print(f"Emergency Level: {pred['predictions']['emergency_level']} ")
+        print(f"Disaster Type: {pred['predictions']['disaster_type']} ")
+        print(f"Sentiment: {pred['predictions']['sentiment']} ")
