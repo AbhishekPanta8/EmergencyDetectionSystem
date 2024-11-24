@@ -122,7 +122,7 @@ def create_911_calls_dataset():
         df = pd.concat([df, df.sample(additional_rows, replace=True)], ignore_index=True)
 
     # Save dataset
-    df.to_csv('data/processed/911_calls_dataset_1000.csv', index=False)
+    df.to_csv('data/raw/911_calls_dataset_1000.csv', index=False)
     print(f"Created 911 calls dataset with {len(df)} entries.")
     return df
 
