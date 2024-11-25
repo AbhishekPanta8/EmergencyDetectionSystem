@@ -24,7 +24,7 @@ except Exception as e:
     logger.error(f"Failed to initialize predictor: {str(e)}")
     raise
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
     """
     GET endpoint for predicting emergency level from tweet(s)

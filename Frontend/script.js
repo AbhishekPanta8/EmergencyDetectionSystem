@@ -3,7 +3,7 @@ const textInput = document.getElementById('text-input');
 const loader = document.getElementById('symbol-loader');
 const result = document.getElementById('result');
 
-validateBtn.addEventListener('click', () => {
+validateBtn.addEventListener('click', async () => {
   const text = textInput.value.trim();
   if (!text) {
     alert("Please enter emergency details.");
@@ -13,62 +13,75 @@ validateBtn.addEventListener('click', () => {
   loader.style.display = 'flex';
   result.innerHTML = '';
 
-  setTimeout(() => {
-    loader.style.display = 'none';
+  try {
+    const response = await fetch('http://localhost:5000/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        tweets: [text]
+      })
+    });
 
-    // Emergency levels
-    const emergencyLevels = [
-      { level: "High Emergency", emoji: "🔴" },
-      { level: "Moderate Emergency", emoji: "🟠" },
-      { level: "Low Emergency", emoji: "🟢" },
-      { level: "Non Emergency", emoji: "✅" },
-      { level: "Potential Emergency", emoji: "⚠️" }
-    ];
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
 
-    // Disaster types
-    const disasterTypes = [
-      { type: "Earthquake", emoji: "🌍" },
-      { type: "Fire", emoji: "🔥" },
-      { type: "Flood", emoji: "🌊" },
-      { type: "Hurricane", emoji: "🌪️" },
-      { type: "Tornado", emoji: "🌪️" },
-      { type: "Tsunami", emoji: "🌊" },
-      { type: "Other", emoji: "❓" },
-      { type: "Storm", emoji: "🌩️" },
-      { type: "Landslide", emoji: "🏔️" },
-      { type: "Volcanic Eruption", emoji: "🌋" }
-    ];
+    const data = await response.json();
 
-    // Sentiments
-    const sentiments = [
-      { sentiment: "Panic", emoji: "😱" },
-      { sentiment: "Fear", emoji: "😨" },
-      { sentiment: "Urgent", emoji: "⚡" },
-      { sentiment: "Neutral", emoji: "😐" }
-    ];
+    // Mapping backend results to predefined emoji sets
+    const emergencyLevels = {
+      'HIGH_EMERGENCY': { level: "High Emergency", emoji: "🔴" },
+      'MODERATE_EMERGENCY': { level: "Moderate Emergency", emoji: "🟠" },
+      'LOW_EMERGENCY': { level: "Low Emergency", emoji: "🟢" },
+      'NON_EMERGENCY': { level: "Non Emergency", emoji: "✅" }
+    };
 
-    // Random selections
-    const randomEmergency = emergencyLevels[Math.floor(Math.random() * emergencyLevels.length)];
-    const randomDisaster = disasterTypes[Math.floor(Math.random() * disasterTypes.length)];
-    const randomSentiment = sentiments[Math.floor(Math.random() * sentiments.length)];
+    const disasterTypes = {
+      'EARTHQUAKE': { type: "Earthquake", emoji: "🌍" },
+      'FIRE': { type: "Fire", emoji: "🔥" },
+      'FLOOD': { type: "Flood", emoji: "🌊" },
+      'HURRICANE': { type: "Hurricane", emoji: "🌪️" },
+      'TORNADO': { type: "Tornado", emoji: "🌪️" },
+      'TSUNAMI': { type: "Tsunami", emoji: "🌊" },
+      'STORM': { type: "Storm", emoji: "🌩️" },
+      'LANDSLIDE': { type: "Landslide", emoji: "🏔️" },
+      'VOLCANIC_ERUPTION': { type: "Volcanic Eruption", emoji: "🌋" },
+      'OTHER': { type: "Other", emoji: "❓" }
+    };
 
-    // Display results with Analysis Complete message
+    const sentiments = {
+      'URGENT': { sentiment: "Urgent", emoji: "⚡" },
+      'PANIC': { sentiment: "Panic", emoji: "😱" },
+      'FEAR': { sentiment: "Fear", emoji: "😨" },
+      'NEUTRAL': { sentiment: "Neutral", emoji: "😐" }
+    };
+
+    const prediction = data.predictions[0].predictions;
+
+    // Display results with actual backend data
     result.innerHTML = `
       <div>🚦 Analysis Complete! 🚦</div>
       <div class="output-columns">
         <div class="column">
           <h3>Emergency Level</h3>
-          <p class="output-item">${randomEmergency.emoji} ${randomEmergency.level}</p>
+          <p class="output-item">${emergencyLevels[prediction.emergency_level].emoji} ${emergencyLevels[prediction.emergency_level].level}</p>
         </div>
         <div class="column">
           <h3>Disaster Type</h3>
-          <p class="output-item">${randomDisaster.emoji} ${randomDisaster.type}</p>
+          <p class="output-item">${disasterTypes[prediction.disaster_type].emoji} ${disasterTypes[prediction.disaster_type].type}</p>
         </div>
         <div class="column">
           <h3>Sentiment</h3>
-          <p class="output-item">${randomSentiment.emoji} ${randomSentiment.sentiment}</p>
+          <p class="output-item">${sentiments[prediction.sentiment].emoji} ${sentiments[prediction.sentiment].sentiment}</p>
         </div>
       </div>
     `;
-  }, 3000); // Simulate a 3-second delay for loading
+  } catch (error) {
+    console.error('Error:', error);
+    result.innerHTML = `<div>Error processing request: ${error.message}</div>`;
+  } finally {
+    loader.style.display = 'none';
+  }
 });
