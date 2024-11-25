@@ -1,0 +1,163 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(-45deg, #6184f6, #4a48b4, #a39cf6, #efeef3);
+    background-size: 400% 400%;
+    animation: gradientAnimation 8s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .container {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    width: 900px;
+    height: 650px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 25px;
+    text-align: center;
+    animation: fadeIn 1.2s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  h1 {
+    font-size: 32px;
+    color: #444;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  textarea {
+    width: 90%;
+    height: 120px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 16px;
+    resize: none;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  textarea:focus {
+    outline: none;
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(255, 107, 107, 0.6);
+  }
+  
+  button {
+    margin-top: 20px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff6b6b, #d63031);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: box-shadow 0.3s, transform 0.2s;
+  }
+  
+  button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+  }
+  
+  .symbol-loader {
+    display: none;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px auto;
+  }
+  
+  .symbol-loader span {
+    font-size: 40px;
+    animation: bounce 1.5s infinite;
+  }
+  
+  .symbol-loader span:nth-child(1) { animation-delay: 0s; }
+  .symbol-loader span:nth-child(2) { animation-delay: 0.3s; }
+  .symbol-loader span:nth-child(3) { animation-delay: 0.6s; }
+  .symbol-loader span:nth-child(4) { animation-delay: 0.9s; }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  
+  .result {
+    margin-top: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    animation: fadeInResult 0.8s ease forwards;
+  }
+  
+  @keyframes fadeInResult {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* New CSS to add for colored output boxes */
+  .output-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .column {
+    border-radius: 10px;
+    padding: 5px;
+    width: 250px;
+    text-align: center;
+    animation: fadeInResult 0.8s ease;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    color: rgb(2, 1, 1);
+  }
+  
+  .column h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #0b0b0b;
+  }
+  
+  .output-item {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .column:first-child {
+    background-color: #f67878; /* Red for Emergency Level */
+  }
+  
+  .column:nth-child(2) {
+    background-color: #f9c572; /* Orange for Disaster Type */
+  }
+  
+  .column:last-child {
+    background-color: #71c0f4; /* Blue for Sentiment */
+  }
+  
+  @keyframes fadeInResult {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  
